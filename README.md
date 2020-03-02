@@ -1,11 +1,14 @@
 # RemoteImage
 
-Yet another remote image class for SwiftUI
+by Jack Palevich
+
+Yet another remote image package for SwiftUI.
 
 This one's better than most other RemoteImage implementations because:
 
-- It takes handles large images better by pre-rasterizing the image off the main thread, which reduces "jank" when the image is first show.
-
+- It takes an optional maximum size parameter, and scales down large images to fit the given maximum size.
+    - by default images will be clamped to be no larger than full screen size.
+- It pre-rasterizes the image off the main thread,  which greatly reduces "jank" when the image is first show.
 
 # Example
 
@@ -24,3 +27,8 @@ struct ContentView: View {
   }
 }
 ````
+
+# Version History
+
+0.0.1 - first version.
+
