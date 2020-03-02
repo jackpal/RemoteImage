@@ -1,9 +1,10 @@
-#if os(iOS) || os(tvOS)
 import Foundation
 import UIKit
 
+#if os(iOS) || os(tvOS)
+
 extension UIImage {
-  static func firstImageFromGIF(data: Data) -> UIImage? {
+  convenience init?(firstFrameFromGIFData data: Data) {
     guard let source = CGImageSourceCreateWithData(data as CFData, nil)
     else {
       return nil
@@ -11,14 +12,16 @@ extension UIImage {
     guard let cgImage = CGImageSourceCreateImageAtIndex(source, 0, nil) else {
       return nil
     }
-    return UIImage(cgImage: cgImage)
-  }
-
-  static private let GIF89aHeader = "GIF89a".utf8
-
-  static func isGIF(data: Data) -> Bool {
-    return data.starts(with: GIF89aHeader)
+    self.init(cgImage: cgImage)
   }
 }
 
 #endif // os(iOS) || os(tvOS)
+
+extension Data {
+  var isGIF: Bool {
+    return self.starts(with: Data.GIF89aHeader)
+  }
+  
+  static private let GIF89aHeader = "GIF89a".utf8
+}
