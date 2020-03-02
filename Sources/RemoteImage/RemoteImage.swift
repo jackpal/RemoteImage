@@ -4,7 +4,7 @@ public struct RemoteImage: View {
   @ObservedObject var loader: ImageLoader
   @State var isImageLoaded = false
 
-  init(loader: ImageLoader) {
+  public init(loader: ImageLoader) {
     self.loader = loader
   }
 
