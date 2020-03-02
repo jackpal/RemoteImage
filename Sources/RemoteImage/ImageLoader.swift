@@ -12,7 +12,7 @@ public enum ImageLoaderError: Error {
 
 public class ImageLoader: ObservableObject {
   public let url: URL
-  public let targetLength: CGFloat
+  public let targetLengthPixels: CGFloat
 
   private static let decodingQueue = DispatchQueue(label: "ImageLoader.decode")
 
@@ -73,7 +73,7 @@ public class ImageLoader: ObservableObject {
    */
   public init(url: URL, targetLengthPixels: CGFloat) {
     self.url = url
-    self.targetLength = targetLengthPixels
+    self.targetLengthPixels = targetLengthPixels
 
     self.objectWillChange = $image.handleEvents(
       receiveSubscription: { [weak self] sub in
@@ -129,7 +129,7 @@ public class ImageLoader: ObservableObject {
       // of downsampling is that the image is rasterized, which means it will not have
       // to be rasterized the first time it is drawn. Rasterization can cause jank if
       // done on the UI thread.
-      return UIImage(data: data, targetLength: self.targetLength)
+      return UIImage(data: data, targetLengthPixels: targetLengthPixels)
     #else
       return UIImage(data: data)
     #endif
@@ -158,14 +158,23 @@ public func screenSize() -> CGSize {
 
   // Adapted from https://developer.apple.com/videos/play/wwdc2018/219/
   extension UIImage {
-    public convenience init?(data: Data, targetLength: CGFloat) {
+    /**
+     * Creates a pre-rasterized image from the given data, that's clamped in size so than both height and width are `<=` targetLengthPixels.
+     *
+     * If the image is smaller than the clamped size it is not enlarged.
+     *
+     * - Parameters:
+     *     - data: The compressed image data.
+     *     - targetLengthPixels: The target length in pixels.
+     */
+    public convenience init?(data: Data, targetLengthPixels: CGFloat) {
       if data.isGIF {
         self.init(firstFrameFromGIFData: data)
       } else {
         let imageSourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
         let imageSource = CGImageSourceCreateWithData(data as CFData, imageSourceOptions)!
 
-        let maxDimensionInPixels = targetLength
+        let maxDimensionInPixels = targetLengthPixels
 
         let downsampledOptions = [
           kCGImageSourceCreateThumbnailFromImageAlways: true,

@@ -27,6 +27,17 @@ struct ContentView: View {
   }
 }
 ````
+# Credits
+
+Thanks to all the RemoteImage tutorials on the web, especially:
+
+- [Hacking With Swift](https://www.hackingwithswift.com/example-code/uikit/how-to-load-a-remote-image-url-into-uiimageview)
+- [Christian Elies](https://medium.com/better-programming/learn-master-%EF%B8%8F-remote-image-view-in-swiftui-854f8fde592c)
+- [MovieSwiftUI](https://github.com/Dimillian/MovieSwiftUI)
+- [SwiftUI-lab](https://swiftui-lab.com/geometryreader-to-the-rescue/) for GeometryReader insights.
+- [Apple Example code](https://developer.apple.com/videos/play/wwdc2018/219/) for limiting the decoded size and pre-rasterization.
+
+And probably other tutorials that I've accidentally omitted.
 
 # Version History
 
