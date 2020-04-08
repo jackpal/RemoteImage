@@ -11,7 +11,7 @@ public struct RemoteImage: View {
   public var body: some View {
     // Fetch once, because image can be evicted from cache
     // between consecutive calls to loader.
-    let image = loader.image
+    let image = self.uiImage
     return ZStack {
       if image != nil {
         // Use a state variable and an animation instead of
@@ -35,5 +35,17 @@ public struct RemoteImage: View {
           .opacity(0.2)
       }
     }
+  }
+  
+  private var uiImage : UIImage? {
+    let key = loader.url.absoluteString
+    var uiImage = ImageCache.shared[key]
+    if uiImage == nil {
+      uiImage = loader.image
+      if uiImage != nil {
+        ImageCache.shared[key] = uiImage!
+      }
+    }
+    return uiImage
   }
 }
